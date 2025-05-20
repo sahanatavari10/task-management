@@ -5,7 +5,7 @@ from models import User, db
 
 auth_bp = Blueprint('auth', __name__)
 
-@auth_bp('/register', methods=['POST'])
+@auth_bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
     hashed_password = generate_password_hash(data['password'])
@@ -14,7 +14,7 @@ def register():
     db.session.commit()
     return jsonify(message="User registered successfully"), 201
 
-@auth_bp('/login', methods=['POST'])
+@auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     user = User.query.filter_by(username=data['username']).first()
