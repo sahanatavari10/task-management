@@ -13,7 +13,7 @@ def register():
     new_user = User(username=data['username'], email=data['email'], password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
-    return jsonify(message="User registered successfully"), 201
+    return jsonify({"message": "User registered successfully", "user_id": new_user.id}), 201
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
@@ -21,5 +21,5 @@ def login():
     user = User.query.filter_by(username=data['username']).first()
     if user and check_password_hash(user.password, data['password']):
         token = create_access_token(identity=str(user.id))
-        return jsonify(token=token)
+        return jsonify({"token": token, "user_id": user.id})
     return jsonify(message="Invalid credentials"), 401
