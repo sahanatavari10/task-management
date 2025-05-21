@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import Task, db
+from models import Task
+from extensions import db
 
 task_bp = Blueprint('task', __name__)
 
@@ -12,7 +13,7 @@ def create_task():
     task = Task(title=data['title'], description=data.get('description'), user_id=user_id)
     db.session.add(task)
     db.session.commit()
-    return jsonify("Task created", task_id=task.id), 201
+    return jsonify({"message":"Task created", "task_id":task.id}), 201
 
 @task_bp.route('/tasks', methods=['GET'])
 @jwt_required()
